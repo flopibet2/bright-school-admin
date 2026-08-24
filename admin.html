@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Admin Panel - GGHS CHAK NO 493 JB</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden text-gray-800" id="bodyRoot">
+
+    <!-- LOGIN OVERLAY MODAL -->
+    <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 border border-gray-200 text-center">
+            <div class="w-16 h-16 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h2 class="text-xl font-bold text-gray-800 mb-1">Admin Portal Login</h2>
+            <p class="text-xs text-gray-500 mb-6">GGHS CHAK NO 493 JB</p>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="mb-4 text-left">
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter admin password" required class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none">
+                </div>
+                <p id="loginError" class="text-xs text-red-600 mb-4 font-semibold" style="display:none;">Ghalat Password! Dobara koshish karein.</p>
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition duration-300 shadow-md">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Login
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin UI Wrapper: hidden until login succeeds -->
+    <div id="adminContent" style="display:none; width:100%; height:100%; overflow:hidden; display:none;" class="flex w-full h-full overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-green-800 text-white flex flex-col shadow-xl hidden md:flex">
+        <div class="h-20 flex items-center px-6 border-b border-green-700">
+            <i class="fas fa-shield-alt text-3xl mr-3 text-green-300"></i>
+            <div>
+                <span class="text-lg font-bold block">Admin Portal</span>
+                <span class="text-xs text-green-300">GGHS 493 JB</span>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <a href="#general-section" class="flex items-center px-4 py-3 bg-green-700 text-white rounded-lg">
+                <i class="fas fa-tachometer-alt w-6"></i>
+                <span class="font-medium">General & Principal</span>
+            </a>
+            <a href="#profile-section" class="flex items-center px-4 py-3 text-green-200 hover:bg-green-700 hover:text-white rounded-lg transition">
+                <i class="fas fa-school w-6"></i>
+                <span class="font-medium">Profile & Monitoring</span>
+            </a>
+            <a href="#staff-section" class="flex items-center px-4 py-3 text-green-200 hover:bg-green-700 hover:text-white rounded-lg transition">
+                <i class="fas fa-users w-6"></i>
+                <span class="font-medium">Staff Attendance</span>
+            </a>
+            <a href="#toppers-section" class="flex items-center px-4 py-3 text-green-200 hover:bg-green-700 hover:text-white rounded-lg transition">
+                <i class="fas fa-award w-6"></i>
+                <span class="font-medium">Top Position Holders</span>
+            </a>
+            <a href="#facilities-section" class="flex items-center px-4 py-3 text-green-200 hover:bg-green-700 hover:text-white rounded-lg transition">
+                <i class="fas fa-building w-6"></i>
+                <span class="font-medium">Facilities Status</span>
+            </a>
+            <a href="#dynamic-section" class="flex items-center px-4 py-3 text-green-200 hover:bg-green-700 hover:text-white rounded-lg transition">
+                <i class="fas fa-plus-circle w-6"></i>
+                <span class="font-medium">Add New Section</span>
+            </a>
+        </nav>
+        <div class="p-4 border-t border-green-700">
+            <button onclick="handleLogout()" class="w-full flex items-center justify-center px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white transition">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        
+        <!-- Header -->
+        <header class="h-20 bg-white shadow-sm flex items-center justify-between px-6 z-10">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-bold text-gray-800">Admin Control Panel</h1>
+            </div>
+            <div class="flex items-center">
+                <span class="mr-3 text-sm font-medium text-gray-600">Welcome, <span class="font-bold text-green-700">Dr. Noor</span></span>
+                <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center border-2 border-green-600">
+                    <i class="fas fa-user-tie text-green-700"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Form Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
+            
+            <form id="adminForm" onsubmit="saveAllData(event)">
+                
+                <!-- 1. General Info & Principal Section -->
+                <div id="general-section" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+                    <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4"><i class="fas fa-info-circle text-green-600 mr-2"></i> General Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">School Status</label>
+                            <select id="schoolStatus" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none bg-gray-50">
+                                <option value="Open" selected>Open</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Principal Name</label>
+                            <input type="text" id="principalName" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Principal Phone</label>
+                            <input type="text" id="principalPhone" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Profile & Monitoring Details Section -->
+                <div id="profile-section" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+                    <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4"><i class="fas fa-school text-green-600 mr-2"></i> Profile & Monitoring Details Update</h2>
+                    
+                    <h3 class="text-sm font-bold text-blue-700 uppercase mb-3">School Info & Location</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Level</label>
+                            <input type="text" id="schoolLevel" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Markaz</label>
+                            <input type="text" id="schoolMarkaz" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Mauza</label>
+                            <input type="text" id="schoolMauza" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">UC Name</label>
+                            <input type="text" id="schoolUC" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Constituency (PP / NA)</label>
+                            <input type="text" id="schoolConstituency" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Illegal Occupation</label>
+                            <select id="illegalOccupation" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none bg-white">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3 class="text-sm font-bold text-blue-700 uppercase mb-3">Latest Monitoring Record Data</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                            <input type="text" id="monDate" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                            <input type="text" id="monTime" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Form No</label>
+                            <input type="text" id="monFormNo" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">MEA Name</label>
+                            <input type="text" id="monMeaName" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">MEA Phone</label>
+                            <input type="text" id="monMeaPhone" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Staff Attendance Section -->
+                <div id="staff-section" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+                    <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4"><i class="fas fa-users text-green-600 mr-2"></i> Today's Staff Attendance</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Total Teaching Staff</label>
+                            <input type="number" id="totalStaff" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-green-700 mb-1">Staff Present</label>
+                            <input type="number" id="presentStaff" class="w-full border border-green-300 bg-green-50 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-red-700 mb-1">Staff Absent</label>
+                            <input type="number" id="absentStaff" readonly class="w-full border border-red-300 bg-red-50 rounded-lg p-2.5 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Top Position Holders Update Section -->
+                <div id="toppers-section" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+                    <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4"><i class="fas fa-award text-yellow-600 mr-2"></i> Update Top Position Holders (1st, 2nd, 3rd)</h2>
+                    
+                    <!-- 1st Position -->
+                    <div class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+                        <h3 class="text-sm font-bold text-yellow-700 mb-2">1st Position Holder</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Student Name</label>
+                                <input type="text" id="top1Name" class="w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-yellow-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Roll Number</label>
+                                <input type="text" id="top1Roll" class="w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-yellow-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Marks</label>
+                                <input type="text" id="top1Marks" class="w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-yellow-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2nd Position -->
+                    <div class="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                        <h3 class="text-sm font-bold text-gray-700 mb-2">2nd Position Holder</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Student Name</label>
+                                <input type="text" id="top2Name" class="w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-gray-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Roll Number</label>
+                                <input type="text" id="top2Roll" class="w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-gray-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Marks</label>
+                                <input type="text" id="top2Marks" class="w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-gray-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3rd Position -->
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                        <h3 class="text-sm font-bold text-amber-700 mb-2">3rd Position Holder</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Student Name</label>
+                                <input type="text" id="top3Name" class="w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Roll Number</label>
+                                <input type="text" id="top3Roll" class="w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Marks</label>
+                                <input type="text" id="top3Marks" class="w-full border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Facilities Status Section -->
+                <div id="facilities-section" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+                    <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4"><i class="fas fa-building text-green-600 mr-2"></i> Facilities Status</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div class="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
+                            <div>
+                                <p class="font-bold text-gray-800"><i class="fas fa-bolt text-yellow-500 mr-2"></i> Electricity</p>
+                            </div>
+                            <select id="facElectricity" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                                <option value="Wholly">Wholly Functional</option>
+                                <option value="Partially">Partially Functional</option>
+                                <option value="No">Not Functional</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
+                            <div>
+                                <p class="font-bold text-gray-800"><i class="fas fa-tint text-blue-500 mr-2"></i> Drinking Water</p>
+                            </div>
+                            <select id="facWater" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                                <option value="Wholly">Wholly Functional (Clean)</option>
+                                <option value="Partially">Partially Functional</option>
+                                <option value="No">Not Functional</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
+                            <div>
+                                <p class="font-bold text-gray-800"><i class="fas fa-restroom text-purple-500 mr-2"></i> Toilet Facility</p>
+                            </div>
+                            <select id="facToilet" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                                <option value="Wholly">Wholly Functional</option>
+                                <option value="Partially">Partially Functional</option>
+                                <option value="No">Not Functional</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
+                            <div>
+                                <p class="font-bold text-gray-800"><i class="fas fa-border-all text-orange-500 mr-2"></i> Boundary Wall</p>
+                            </div>
+                            <select id="facWall" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                                <option value="Wholly">Wholly Functional</option>
+                                <option value="Partially">Partially Functional</option>
+                                <option value="No">Not Functional</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 6. Add New Custom Section / Khana Builder -->
+                <div id="dynamic-section" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+                    <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4"><i class="fas fa-plus-square text-green-600 mr-2"></i> Website mein koi bhi naya khana ya section add karein</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Naye Khane ka Title (Heading)</label>
+                            <input type="text" id="newTitle" placeholder="Misal: Sports Gala Results / Important Notice" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Icon Select Karein (FontAwesome Class)</label>
+                            <input type="text" id="newIcon" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Details / Text (Jo is khane ke andar dikhe ga)</label>
+                        <textarea id="newContent" rows="3" placeholder="Yahan tafseel likhein..." class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <div class="bg-gray-100 p-4 rounded-xl flex justify-end items-center border border-gray-200">
+                    <p class="text-sm text-green-600 font-bold mr-4" id="updateMessage" style="display:none;"><i class="fas fa-check-circle mr-1"></i> Data Firebase par save ho gaya hai!</p>
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md">
+                        <i class="fas fa-save mr-2"></i> Save All Changes
+                    </button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+    </div><!-- /adminContent -->
+
+    <!-- Backend Integration Script -->
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+
+        function showAdminPanel() {
+            document.getElementById('loginModal').style.display = 'none';
+            const ac = document.getElementById('adminContent');
+            ac.style.display = 'flex';
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('adminContent').style.display = 'none';
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        // Login Handler via FastAPI Endpoint
+        async function handleLogin(event) {
+            event.preventDefault();
+            const pass = document.getElementById('adminPassword').value;
+            const errEl = document.getElementById('loginError');
+            errEl.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pass })
+                });
+
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    showAdminPanel();
+                    loadAdminData();
+                } else {
+                    errEl.style.display = 'block';
+                }
+            } catch (error) {
+                console.error("Connection error:", error);
+                alert("Server se connect nahi ho pa raha! Server chal raha hai ya nahi check karein.");
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('isLoggedIn');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+            hideAdminPanel();
+        }
+
+        // On page load: show panel only if previously logged in this session
+        window.onload = function() {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                showAdminPanel();
+                loadAdminData();
+            }
+            // Otherwise loginModal stays visible, adminContent stays hidden
+        };
+
+        // Fetch existing data from Python SQLite DB to fill inputs
+        async function loadAdminData() {
+            try {
+                const response = await fetch(`${API_URL}/api/data`);
+                if(response.ok) {
+                    const data = await response.json();
+                    
+                    document.getElementById('schoolStatus').value = data.status || "Open";
+                    document.getElementById('principalName').value = data.principalName || "";
+                    document.getElementById('principalPhone').value = data.principalPhone || "";
+                    document.getElementById('schoolLevel').value = data.level || "";
+                    document.getElementById('schoolMarkaz').value = data.markaz || "";
+                    document.getElementById('schoolMauza').value = data.mauza || "";
+                    document.getElementById('schoolUC').value = data.uc || "";
+                    document.getElementById('schoolConstituency').value = data.constituency || "";
+                    document.getElementById('illegalOccupation').value = data.illegalOccupation || "No";
+                    document.getElementById('monDate').value = data.monDate || "";
+                    document.getElementById('monTime').value = data.monTime || "";
+                    document.getElementById('monFormNo').value = data.monFormNo || "";
+                    document.getElementById('monMeaName').value = data.monMeaName || "";
+                    document.getElementById('monMeaPhone').value = data.monMeaPhone || "";
+                    document.getElementById('totalStaff').value = data.totalStaff || "";
+                    document.getElementById('presentStaff').value = data.presentStaff || "";
+                    document.getElementById('absentStaff').value = data.absentStaff || "";
+                    
+                    document.getElementById('top1Name').value = data.top1Name || "";
+                    document.getElementById('top1Roll').value = data.top1Roll || "";
+                    document.getElementById('top1Marks').value = data.top1Marks || "";
+                    document.getElementById('top2Name').value = data.top2Name || "";
+                    document.getElementById('top2Roll').value = data.top2Roll || "";
+                    document.getElementById('top2Marks').value = data.top2Marks || "";
+                    document.getElementById('top3Name').value = data.top3Name || "";
+                    document.getElementById('top3Roll').value = data.top3Roll || "";
+                    document.getElementById('top3Marks').value = data.top3Marks || "";
+
+                    document.getElementById('facElectricity').value = data.electricity || "Wholly";
+                    document.getElementById('facWater').value = data.water || "Wholly";
+                    document.getElementById('facToilet').value = data.toilet || "Wholly";
+                    document.getElementById('facWall').value = data.wall || "Wholly";
+                    
+                    document.getElementById('newTitle').value = data.newSectionTitle || "";
+                    document.getElementById('newIcon').value = data.newSectionIcon || "";
+                    document.getElementById('newContent').value = data.newSectionContent || "";
+                }
+            } catch (error) {
+                console.error("Error fetching data from python backend:", error);
+            }
+        }
+
+        // Automatic calculation for absent staff
+        document.getElementById('totalStaff').addEventListener('input', calculateAbsent);
+        document.getElementById('presentStaff').addEventListener('input', calculateAbsent);
+
+        function calculateAbsent() {
+            var total = parseInt(document.getElementById('totalStaff').value) || 0;
+            var present = parseInt(document.getElementById('presentStaff').value) || 0;
+            
+            if(present > total) {
+                alert("Present staff cannot be greater than total staff!");
+                document.getElementById('presentStaff').value = total;
+                present = total;
+            }
+            
+            var absent = total - present;
+            document.getElementById('absentStaff').value = absent;
+        }
+
+        // Save All Data to Python FastAPI Backend
+        async function saveAllData(event) {
+            event.preventDefault();
+            
+            var btn = event.target.querySelector('button[type="submit"]');
+            var originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving...';
+            btn.classList.add('opacity-75');
+
+            const schoolData = {
+                status: document.getElementById('schoolStatus').value,
+                principalName: document.getElementById('principalName').value,
+                principalPhone: document.getElementById('principalPhone').value,
+                level: document.getElementById('schoolLevel').value,
+                markaz: document.getElementById('schoolMarkaz').value,
+                mauza: document.getElementById('schoolMauza').value,
+                uc: document.getElementById('schoolUC').value,
+                constituency: document.getElementById('schoolConstituency').value,
+                illegalOccupation: document.getElementById('illegalOccupation').value,
+                monDate: document.getElementById('monDate').value,
+                monTime: document.getElementById('monTime').value,
+                monFormNo: document.getElementById('monFormNo').value,
+                monMeaName: document.getElementById('monMeaName').value,
+                monMeaPhone: document.getElementById('monMeaPhone').value,
+                totalStaff: document.getElementById('totalStaff').value,
+                presentStaff: document.getElementById('presentStaff').value,
+                absentStaff: document.getElementById('absentStaff').value,
+                
+                top1Name: document.getElementById('top1Name').value,
+                top1Roll: document.getElementById('top1Roll').value,
+                top1Marks: document.getElementById('top1Marks').value,
+                top2Name: document.getElementById('top2Name').value,
+                top2Roll: document.getElementById('top2Roll').value,
+                top2Marks: document.getElementById('top2Marks').value,
+                top3Name: document.getElementById('top3Name').value,
+                top3Roll: document.getElementById('top3Roll').value,
+                top3Marks: document.getElementById('top3Marks').value,
+
+                electricity: document.getElementById('facElectricity').value,
+                water: document.getElementById('facWater').value,
+                toilet: document.getElementById('facToilet').value,
+                wall: document.getElementById('facWall').value,
+                
+                newSectionTitle: document.getElementById('newTitle').value,
+                newSectionIcon: document.getElementById('newIcon').value,
+                newSectionContent: document.getElementById('newContent').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/api/data`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(schoolData)
+                });
+
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-75');
+
+                if (response.ok) {
+                    var msg = document.getElementById('updateMessage');
+                    msg.style.display = 'block';
+                    setTimeout(() => { msg.style.display = 'none'; }, 4000);
+                } else {
+                    alert("Server error while saving data.");
+                }
+            } catch (error) {
+                btn.innerHTML = originalText;
+                btn.classList.remove('opacity-75');
+                console.error("Error: ", error);
+                alert("Server se connection fail ho gaya!");
+            }
+        }
+    </script>
+</body>
+</html>
