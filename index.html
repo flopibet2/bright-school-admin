@@ -366,6 +366,15 @@
         // Login Handler via FastAPI Endpoint
         async function handleLogin(event) {
             event.preventDefault();
+            const loginButton = event.target.querySelector('button[type="submit"]');
+            if (loginButton.disabled) return;
+
+            const originalLoginButtonContent = loginButton.innerHTML;
+            loginButton.disabled = true;
+            loginButton.setAttribute('aria-busy', 'true');
+            loginButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Checking...';
+            loginButton.classList.add('opacity-75', 'cursor-not-allowed');
+
             const pass = document.getElementById('adminPassword').value;
             const errEl = document.getElementById('loginError');
             errEl.style.display = 'none';
@@ -384,8 +393,16 @@
                     loadAdminData();
                 } else {
                     errEl.style.display = 'block';
+                    loginButton.disabled = false;
+                    loginButton.removeAttribute('aria-busy');
+                    loginButton.innerHTML = originalLoginButtonContent;
+                    loginButton.classList.remove('opacity-75', 'cursor-not-allowed');
                 }
             } catch (error) {
+                loginButton.disabled = false;
+                loginButton.removeAttribute('aria-busy');
+                loginButton.innerHTML = originalLoginButtonContent;
+                loginButton.classList.remove('opacity-75', 'cursor-not-allowed');
                 console.error("Connection error:", error);
                 alert("Server se connect nahi ho pa raha! Server chal raha hai ya nahi check karein.");
             }
