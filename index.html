@@ -21,9 +21,7 @@
     <!-- LOGIN OVERLAY MODAL -->
     <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 border border-gray-200 text-center">
-            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner overflow-hidden">
-                <img src="bright-star-school.png" alt="Bright Stars School System logo" class="w-full h-full object-contain">
-            </div>
+            <img src="bright-star-school.png" alt="Bright Stars School System logo" class="w-16 h-16 object-contain mx-auto mb-4">
             <h2 class="text-xl font-bold text-gray-800 mb-1">Admin Portal Login</h2>
             <p class="text-xs text-gray-500 mb-6">Bright Stars School System CHAK NO 493 JB</p>
             
@@ -45,7 +43,9 @@
     <!-- Sidebar -->
     <aside class="w-64 bg-green-800 text-white flex flex-col shadow-xl hidden md:flex">
         <div class="h-20 flex items-center px-6 border-b border-green-700">
-            <img src="bright-star-school.png" alt="Bright Stars School System logo" class="w-12 h-12 object-contain mr-3">
+            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-3 overflow-hidden shrink-0">
+                <img src="bright-star-school.png" alt="Bright Stars School System logo" class="w-12 h-12 object-contain">
+            </div>
             <div>
                 <span class="text-lg font-bold block">Admin Portal</span>
                 <span class="text-xs text-green-300">Bright Stars School System 493 JB</span>
@@ -58,7 +58,7 @@
             </a>
             <a href="#profile-section" class="flex items-center px-4 py-3 text-green-200 hover:bg-green-700 hover:text-white rounded-lg transition">
                 <i class="fas fa-school w-6"></i>
-                <span class="font-medium">Profile Details</span>
+                <span class="font-medium">School Profile</span>
             </a>
             <a href="#staff-section" class="flex items-center px-4 py-3 text-green-200 hover:bg-green-700 hover:text-white rounded-lg transition">
                 <i class="fas fa-users w-6"></i>
@@ -120,16 +120,12 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Principal Name</label>
                             <input type="text" id="principalName" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Principal Phone</label>
-                            <input type="text" id="principalPhone" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
-                        </div>
                     </div>
                 </div>
 
-                <!-- 2. Profile Details Section -->
+                <!-- 2. School Profile Section -->
                 <div id="profile-section" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
-                    <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4"><i class="fas fa-school text-green-600 mr-2"></i> Profile Details Update</h2>
+                    <h2 class="text-lg font-bold text-gray-800 border-b pb-3 mb-4"><i class="fas fa-school text-green-600 mr-2"></i> School Profile Update</h2>
                     
                     <h3 class="text-sm font-bold text-blue-700 uppercase mb-3">School Info & Location</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -152,13 +148,6 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Constituency (PP / NA)</label>
                             <input type="text" id="schoolConstituency" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Illegal Occupation</label>
-                            <select id="illegalOccupation" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none bg-white">
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                            </select>
                         </div>
                     </div>
 
@@ -332,22 +321,17 @@
                         <p class="text-xs text-red-600 mt-1">Leave empty to hide the notification from the public page.</p>
                     </div>
 
-                    <h3 class="text-sm font-bold text-blue-700 uppercase mb-3">Custom Notice</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Naye Khane ka Title (Heading)</label>
-                            <input type="text" id="newTitle" placeholder="Misal: Sports Gala Results / Important Notice" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Icon Select Karein (FontAwesome Class)</label>
-                            <input type="text" id="newIcon" class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none">
-                        </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-bold text-blue-700 uppercase">Custom Notices</h3>
+                        <button type="button" onclick="addCustomNotice()" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded-lg transition" title="Add custom notice">
+                            <i class="fas fa-plus mr-2"></i> Add Notice
+                        </button>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Details / Text (Jo is khane ke andar dikhe ga)</label>
-                        <textarea id="newContent" rows="3" placeholder="Yahan tafseel likhein..." class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-green-500 focus:outline-none"></textarea>
+                    <div id="customNoticesContainer" class="space-y-4"></div>
+
+                    <div id="noCustomNotices" class="text-sm text-gray-500 border border-dashed border-gray-300 rounded-lg p-4 text-center">
+                        No custom notices added.
                     </div>
                 </div>
 
@@ -414,6 +398,74 @@
             hideAdminPanel();
         }
 
+        function addCustomNotice(title = '', content = '') {
+            const notice = document.createElement('div');
+            notice.className = 'custom-notice border border-blue-200 rounded-lg p-4 bg-blue-50';
+            notice.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-bold text-blue-700">Custom Notice</span>
+                    <button type="button" onclick="this.closest('.custom-notice').remove(); updateCustomNoticeEmptyState();" class="text-red-600 hover:text-red-800 p-2" title="Delete notice" aria-label="Delete notice">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input type="text" class="custom-notice-title w-full border border-gray-300 rounded-lg p-2.5 mb-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Misal: Sports Gala Results / Important Notice">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Details / Text</label>
+                <textarea rows="3" class="custom-notice-content w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Yahan tafseel likhein..."></textarea>
+            `;
+            notice.querySelector('.custom-notice-title').value = title;
+            notice.querySelector('.custom-notice-content').value = content;
+            document.getElementById('customNoticesContainer').appendChild(notice);
+            updateCustomNoticeEmptyState();
+        }
+
+        function updateCustomNoticeEmptyState() {
+            const hasNotices = document.querySelector('.custom-notice') !== null;
+            document.getElementById('noCustomNotices').style.display = hasNotices ? 'none' : 'block';
+        }
+
+        function getCustomNotices() {
+            return Array.from(document.querySelectorAll('.custom-notice')).map(notice => ({
+                title: notice.querySelector('.custom-notice-title').value.trim(),
+                content: notice.querySelector('.custom-notice-content').value.trim()
+            }));
+        }
+
+        addCustomNotice();
+
+        // Keep the sidebar selection aligned with clicks and the scroll position.
+        const sidebarLinks = Array.from(document.querySelectorAll('aside nav a'));
+        const contentArea = document.querySelector('main');
+        const contentSections = sidebarLinks
+            .map(link => document.querySelector(link.getAttribute('href')))
+            .filter(Boolean);
+
+        function setActiveSidebarLink(sectionId) {
+            sidebarLinks.forEach(link => {
+                const isActive = link.getAttribute('href') === `#${sectionId}`;
+                link.classList.toggle('bg-green-700', isActive);
+                link.classList.toggle('text-white', isActive);
+                link.classList.toggle('text-green-200', !isActive);
+            });
+        }
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                setActiveSidebarLink(link.getAttribute('href').slice(1));
+            });
+        });
+
+        contentArea.addEventListener('scroll', () => {
+            const activeSection = contentSections.reduce((currentSection, section) => {
+                const sectionTop = section.getBoundingClientRect().top - contentArea.getBoundingClientRect().top;
+                return sectionTop <= 32 ? section : currentSection;
+            }, contentSections[0]);
+
+            setActiveSidebarLink(activeSection.id);
+        }, { passive: true });
+
+        setActiveSidebarLink(contentSections[0].id);
+
         // On page load: show panel only if previously logged in this session
         window.onload = function() {
             if (sessionStorage.getItem('isLoggedIn') === 'true') {
@@ -432,13 +484,11 @@
                     
                     document.getElementById('schoolStatus').value = data.status || "Open";
                     document.getElementById('principalName').value = data.principalName || "";
-                    document.getElementById('principalPhone').value = data.principalPhone || "";
                     document.getElementById('schoolLevel').value = data.level || "";
                     document.getElementById('schoolMarkaz').value = data.markaz || "";
                     document.getElementById('schoolMauza').value = data.mauza || "";
                     document.getElementById('schoolUC').value = data.uc || "";
                     document.getElementById('schoolConstituency').value = data.constituency || "";
-                    document.getElementById('illegalOccupation').value = data.illegalOccupation || "No";
                     document.getElementById('monDate').value = data.monDate || "";
                     document.getElementById('monTime').value = data.monTime || "";
                     document.getElementById('monFormNo').value = data.monFormNo || "";
@@ -464,9 +514,15 @@
                     document.getElementById('facWall').value = data.wall || "Wholly";
                     
                     document.getElementById('holidaysText').value = data.holidaysText || "";
-                    document.getElementById('newTitle').value = data.newSectionTitle || "";
-                    document.getElementById('newIcon').value = data.newSectionIcon || "";
-                    document.getElementById('newContent').value = data.newSectionContent || "";
+                    document.getElementById('customNoticesContainer').innerHTML = '';
+                    const customNotices = Array.isArray(data.customNotices) ? data.customNotices : [];
+                    if (customNotices.length > 0) {
+                        customNotices.forEach(notice => addCustomNotice(notice.title || '', notice.content || ''));
+                    } else if (data.newSectionTitle || data.newSectionContent) {
+                        addCustomNotice(data.newSectionTitle || '', data.newSectionContent || '');
+                    } else {
+                        updateCustomNoticeEmptyState();
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching data from python backend:", error);
@@ -504,13 +560,11 @@
             const schoolData = {
                 status: document.getElementById('schoolStatus').value,
                 principalName: document.getElementById('principalName').value,
-                principalPhone: document.getElementById('principalPhone').value,
                 level: document.getElementById('schoolLevel').value,
                 markaz: document.getElementById('schoolMarkaz').value,
                 mauza: document.getElementById('schoolMauza').value,
                 uc: document.getElementById('schoolUC').value,
                 constituency: document.getElementById('schoolConstituency').value,
-                illegalOccupation: document.getElementById('illegalOccupation').value,
                 monDate: document.getElementById('monDate').value,
                 monTime: document.getElementById('monTime').value,
                 monFormNo: document.getElementById('monFormNo').value,
@@ -536,9 +590,7 @@
                 wall: document.getElementById('facWall').value,
                 
                 holidaysText: document.getElementById('holidaysText').value,
-                newSectionTitle: document.getElementById('newTitle').value,
-                newSectionIcon: document.getElementById('newIcon').value,
-                newSectionContent: document.getElementById('newContent').value
+                customNotices: getCustomNotices()
             };
 
             try {
